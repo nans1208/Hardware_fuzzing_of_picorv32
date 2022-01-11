@@ -1,4 +1,4 @@
-********* IMPORTANT NOTES *************
+********** IMPORTANT NOTES *************
 # To verilate the core use command : make rand_inst
 # Before running any simulation run the command : make clean in order to clean previous logs.
 # Manually delete mutated_initial_val.hex file by using command line command : rm mutated_initial_val.hex
