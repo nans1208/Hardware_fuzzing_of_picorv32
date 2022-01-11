@@ -1,0 +1,15 @@
+********* IMPORTANT NOTES *************
+# To verilate the core use command : make rand_inst
+# Before running any simulation run the command : make clean in order to clean previous logs.
+# Manually delete mutated_initial_val.hex file by using command line command : rm mutated_initial_val.hex
+# To verify the intructions mutation on 2 simulations follow below steps :
+1. make clean
+2. rm mutated_initial_val.hex
+   (Above steps necessary if have previous simulation in the repo)
+3. make rand_inst
+4. make clean
+5. open hdl/picorv32/memory_modelling.sv and comment out line no. 46 & uncomment line no. 45
+6. open hdl/picorv32/picorv32core.v and comment out line no. 63 and 64 & uncomment line no. 61 and 62
+7. make rand_inst
+8. gvimdiff mutated_initial_val.hex mutated_initial_val_check.hex (both the files should be identical)
+

@@ -57,18 +57,11 @@ module picorv32core (input clk);
 			  .mem_rdata(mem_rdata)
 		          );
 
-    //initial begin
-    //  `ifdef NOP
-    //     $readmemh("./firmware/firmware_nop.hex", memory_modelling_inst.foobar);
-    //  `elsif ADDI
-    //     $readmemh("./firmware/firmware_addi.hex", memory_modelling_inst.foobar);
-    //  `elsif STORE_LOAD
-    //     $readmemh("./firmware/firmware_store_load.hex", memory_modelling_inst.foobar);
-    //  `elsif JUMP
-    //     $readmemh("./firmware/firmware_jump.hex", memory_modelling_inst.foobar);
-    //  `else
-    //     $readmemh("./firmware/firmware_rand.hex", memory_modelling_inst.foobar);
-    //  `endif
-    //end
-
+    // Reading and storing 500 instructions in the memory model.
+    initial begin
+         //$readmemh("./mutated_initial_val.hex", memory_modelling_inst.current_db);
+         //$readmemh("./mutated_initial_val.hex", memory_modelling_inst.initial_db);
+         $readmemh("./initial_val.hex", memory_modelling_inst.current_db);
+         $readmemh("./initial_val.hex", memory_modelling_inst.initial_db);
+    end
 endmodule
