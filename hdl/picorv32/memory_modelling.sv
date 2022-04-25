@@ -1,18 +1,19 @@
+`include "model_parameters.v"
+
 module memory_modelling (input logic clk, 
 	                input logic [3:0] mem_la_wstrb, 
-			input logic [31:0] mem_la_wdata, 
-			input logic [31:0] mem_la_addr, 
+			input logic [`SIZE_OF_THE_BUS - 1:0] mem_la_wdata, 
+			input logic [`SIZE_OF_THE_BUS - 1:0] mem_la_addr, 
 			input logic mem_la_read,
 			input logic mem_la_write,
 			input logic mem_instr,
 			input logic mem_valid,
 			output logic mem_ready, 
-			output logic [31:0] mem_rdata);
-	
-  import "DPI-C" function bit [31:0] number_of_inst_gen (input int number_of_instructions);
+			output logic [`SIZE_OF_THE_BUS - 1:0] mem_rdata);
+  import "DPI-C" function bit [`SIZE_OF_THE_BUS - 1:0] number_of_inst_gen (input int number_of_instructions, input int m_addr);
 
-  logic [31:0] current_db [logic [31:0]];
-  logic [31:0] initial_db [logic [31:0]];
+  logic [`SIZE_OF_THE_BUS - 1:0] current_db [logic [`SIZE_OF_THE_BUS - 1:0]];
+  logic [`SIZE_OF_THE_BUS - 1:0] initial_db [logic [`SIZE_OF_THE_BUS - 1:0]];
   int file_handle;
 
   always @(posedge clk) begin
@@ -37,16 +38,17 @@ module memory_modelling (input logic clk,
   // 3. Two database are created one holds only the values created while
   // reading from memory i.e initial_db while other holds both the read and
   // writen values of the memory i.e current_db
-  function logic [31:0] mem_read(input logic [31:0] m_addr);
-    logic [31:0] mem_rdata;
+  function logic [`SIZE_OF_THE_BUS - 1:0] mem_read(input logic [`SIZE_OF_THE_BUS - 1:0] m_addr);
+    logic [`SIZE_OF_THE_BUS - 1:0] mem_rdata;
         /* verilator lint_off WIDTH */
+		$display("Addr = %0x", m_addr);
         if (!initial_db.exists(m_addr >> 2)) begin
 		if (m_addr > 32'hFFFF) begin
         	     current_db[m_addr >> 2] = $random;
         	     initial_db[m_addr >> 2] = current_db[m_addr >> 2];
 	        end
 		else begin
-                     initial_db[m_addr >> 2] = number_of_inst_gen(1);
+                     initial_db[m_addr >> 2] = number_of_inst_gen(1, m_addr);
                      current_db[m_addr >> 2] = initial_db[m_addr >> 2];
 		end
         end
@@ -65,8 +67,8 @@ module memory_modelling (input logic clk,
   //         wdata : data to be written in the memory
   // Functionality :
   // Writes the value present in the internal register of the core to the memory address given by the instruction. 
-  task mem_write(input logic [31:0] mem_addr, input logic [3:0] write_strobe, input logic [31:0] wdata);
-     logic [31:0] m_addr;
+  task mem_write(input logic [`SIZE_OF_THE_BUS - 1:0] mem_addr, input logic [3:0] write_strobe, input logic [`SIZE_OF_THE_BUS - 1:0] wdata);
+     logic [`SIZE_OF_THE_BUS - 1:0] m_addr;
 
        m_addr = mem_addr >> 2;
        if (write_strobe[0]) current_db[m_addr][ 7: 0] = wdata[ 7: 0];

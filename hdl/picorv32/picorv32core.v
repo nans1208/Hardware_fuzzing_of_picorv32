@@ -1,20 +1,20 @@
 `timescale 1 ns / 1 ps
-
+`include "model_parameters.v"
 module picorv32core (input clk);
 
         // Core0
 	wire mem_valid;
 	wire mem_instr;
 	reg mem_ready;
-	wire [31:0] mem_addr;
-	wire [31:0] mem_wdata;
+	wire [`SIZE_OF_THE_BUS - 1:0] mem_addr;
+	wire [`SIZE_OF_THE_BUS - 1:0] mem_wdata;
 	wire [3:0] mem_wstrb;
-	reg [31:0] mem_rdata;
+	reg [`SIZE_OF_THE_BUS - 1:0] mem_rdata;
 
 	wire mem_la_read;
 	wire mem_la_write;
-	wire [31:0] mem_la_addr;
-	wire [31:0] mem_la_wdata;
+	wire [`SIZE_OF_THE_BUS - 1:0] mem_la_addr;
+	wire [`SIZE_OF_THE_BUS - 1:0] mem_la_wdata;
 	wire [3:0] mem_la_wstrb;
 
 	reg [3:0] rst_counter;
@@ -27,6 +27,7 @@ module picorv32core (input clk);
 	end
 
 /* verilator lint_off PINMISSING */
+`ifdef PICORV32
 	picorv32 picorv32_core (
 		.clk         (clk         ),
 		.resetn      (resetn      ),
@@ -43,6 +44,7 @@ module picorv32core (input clk);
 		.mem_la_wdata(mem_la_wdata),
 		.mem_la_wstrb(mem_la_wstrb)
 	);
+`endif
 
     memory_modelling memory_modelling_inst(
 	                  .clk(clk), 
