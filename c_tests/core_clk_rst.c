@@ -68,7 +68,8 @@ svBitVecVal number_of_inst_gen(int number_of_instructions, int m_addr) {
 
 	uint32_t instruction;
         //uint8_t opcode [7] = {0x33, 0x13, 0x37, 0x03, 0x23, 0x0f, 0x73};
-        uint8_t opcode [9] = {0x13, 0x33, 0x3, 0x23, 0x63, 0x37, 0x17, 0x6f, 0x67};
+        uint8_t opcode [9] = {0x13, 0x33, 0x3, 0x23, 0x63, 0x37, 0x17, 0x6f, 0x67}; 
+        //uint8_t opcode [8] = {0x13, 0x33, 0x3, 0x23, 0x63, 0x37, 0x17, 0x6f};
         //uint8_t opcode [7] = {0x13, 0x33, 0x3, 0x23, 0x63, 0x37, 0x17};
         uint8_t r1 [31] = {0x1, 0x2, 0x3, 0x4, 0x5, 0x6, 0x7, 0x8, 0x9, 0xa, 0xb, 0xc, 0xd, 0xe, 0xf, 0x10, 0x11, 0x12, 0x13, 0x14, 0x15, 0x16, 0x17, 0x18, 0x19, 0x1a, 0x1b, 0x1c, 0x1d, 0x1e, 0x1f};
         uint8_t r2 [31] = {0x1, 0x2, 0x3, 0x4, 0x5, 0x6, 0x7, 0x8, 0x9, 0xa, 0xb, 0xc, 0xd, 0xe, 0xf, 0x10, 0x11, 0x12, 0x13, 0x14, 0x15, 0x16, 0x17, 0x18, 0x19, 0x1a, 0x1b, 0x1c, 0x1d, 0x1e, 0x1f};
@@ -163,7 +164,7 @@ svBitVecVal number_of_inst_gen(int number_of_instructions, int m_addr) {
           index_rd = rand() % 31;
           instruction = instruction_generator(opcode[index_for_opcode], func3[func3_index], func7, rd[index_rd], r1[index_r1], r2[index_r2], imm);
 
-	  printf ("DEBUG : value of inst = %0x opcode = %0x, index_for_opcode = %0x, func3 = %0x func7= %0x, imm = %0x rd = %0x r1 = %0x, r2 = %0x \n", instruction, opcode[index_for_opcode], index_for_opcode, func3[func3_index], func7, imm, rd[index_rd], r1[index_r1], r2[index_r2]);
+	  //printf ("DEBUG : value of inst = %0x opcode = %0x, index_for_opcode = %0x, func3 = %0x func7= %0x, imm = %0x rd = %0x r1 = %0x, r2 = %0x \n", instruction, opcode[index_for_opcode], index_for_opcode, func3[func3_index], func7, imm, rd[index_rd], r1[index_r1], r2[index_r2]);
           seed++;
 	  return instruction;
 	}
@@ -177,7 +178,7 @@ int main (int argc, char** argv, char** env) {
 
 	Verilated::traceEverOn(true);
 	VerilatedVcdC* tfp = new VerilatedVcdC;
-//Verilated::threadContextp()->coveragep()->write();
+        Verilated::threadContextp()->coveragep()->write();
         VerilatedCov::write("log_rand_inst/coverage.dat");
 
 	top->trace(tfp, 100000);
@@ -187,7 +188,7 @@ int main (int argc, char** argv, char** env) {
 	top->eval();
 
         // Providing clock to the rtl
-	for (int i = 0; i < 500000; i++) {
+	for (int i = 0; i < 5000000; i++) {
           contextp->timeInc(1);
 	  if ((main_time % 10) == 1) {
                   top->clk = 1;

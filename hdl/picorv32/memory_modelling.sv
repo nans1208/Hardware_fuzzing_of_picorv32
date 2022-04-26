@@ -41,7 +41,6 @@ module memory_modelling (input logic clk,
   function logic [`SIZE_OF_THE_BUS - 1:0] mem_read(input logic [`SIZE_OF_THE_BUS - 1:0] m_addr);
     logic [`SIZE_OF_THE_BUS - 1:0] mem_rdata;
         /* verilator lint_off WIDTH */
-		$display("Addr = %0x", m_addr);
         if (!initial_db.exists(m_addr >> 2)) begin
 		if (m_addr > 32'hFFFF) begin
         	     current_db[m_addr >> 2] = $random;
